@@ -19,7 +19,7 @@ extra["springCloudVersion"] = "2020.0.4"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+  implementation("org.springframework.data:spring-data-r2dbc:1.3.5")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
@@ -27,9 +27,16 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
+  implementation("io.arrow-kt:arrow-core:1.0.0")
+  implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+  implementation("io.r2dbc:r2dbc-h2")
+  runtimeOnly("com.h2database:h2")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    exclude(module = "mockito-core")
+  }
+  testImplementation("com.ninja-squad:springmockk:3.0.1")
 	testImplementation("io.projectreactor:reactor-test")
+  testImplementation(  "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
 }
 
 dependencyManagement {
