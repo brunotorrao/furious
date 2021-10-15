@@ -6,6 +6,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import reactor.core.publisher.Mono
 
-suspend fun <T> Mono<T>.awaitSingleOption(): Option<T> = coroutineScope {
-    this@awaitSingleOption.awaitSingleOrNull().toOption()
+suspend fun <T> Mono<T>.awaitOption(): Option<T> = coroutineScope {
+    this@awaitOption.awaitSingleOrNull().toOption()
 }

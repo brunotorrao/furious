@@ -1,9 +1,7 @@
 package com.github.brunotorrao.furious.controllers
 
-import arrow.core.Either
-import arrow.core.right
+import arrow.core.toOption
 import com.github.brunotorrao.furious.domain.Movie
-import com.github.brunotorrao.furious.domain.exceptions.MovieException.MovieNotFoundException
 import com.github.brunotorrao.furious.fixtures.simpleExternalMovieDetails
 import com.github.brunotorrao.furious.fixtures.simpleMovieDetails
 import com.github.brunotorrao.furious.ports.out.DbMoviePort
@@ -23,7 +21,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.toMono
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MockKExtension::class)
@@ -66,7 +63,7 @@ class MovieControllerTest {
         val externalMovieDetails = simpleExternalMovieDetails()
 
         every { dbMoviePort.findById( eq(movieId)) } returns Mono.just(movie)
-        coEvery { externalMoviePort.getDetails(eq(movie.externalId)) } returns externalMovieDetails.right()
+        coEvery { externalMoviePort.getDetails(eq(movie.externalId)) } returns externalMovieDetails.toOption()
 
         val detailsResult = controller.getMovieDetailsById(movieId)
 
@@ -74,18 +71,16 @@ class MovieControllerTest {
     }
 
     @Test
-    fun `given a non existing movie when get details then should return movie not found without throwing`() = runBlockingTest {
+    fun `given a non existing movie when get details then should return empty`() = runBlockingTest {
         val movieId = 1L
         val movie = Movie(movieId, "The Fast and the Furious", "tt0232500")
-        val details = simpleMovieDetails()
 
         every { dbMoviePort.findById( eq(movieId)) } returns Mono.empty()
         coVerify(exactly = 0)  { externalMoviePort.getDetails(eq(movie.externalId)) }
 
         val detailsResult = controller.getMovieDetailsById(movieId)
 
-        assertEquals(true, detailsResult.isLeft())
-        assertEquals(Either.Left(MovieNotFoundException), detailsResult)
+        assertEquals(true, detailsResult.isEmpty())
     }
 
 }

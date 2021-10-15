@@ -1,10 +1,9 @@
 package com.github.brunotorrao.furious.ports.`in`
 
-import arrow.core.Either.Left
-import arrow.core.right
+import arrow.core.None
+import arrow.core.toOption
 import com.github.brunotorrao.furious.controllers.MovieController
 import com.github.brunotorrao.furious.domain.Movie
-import com.github.brunotorrao.furious.domain.exceptions.MovieException.MovieNotFoundException
 import com.github.brunotorrao.furious.fixtures.simpleMovieDetails
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -44,7 +43,7 @@ class HttpMoviePortTest {
 
     @Test
     fun `given movie id when get details then should get movie details`() = runBlockingTest {
-        coEvery { movieController.getMovieDetailsById(eq(1L)) } returns simpleMovieDetails().right()
+        coEvery { movieController.getMovieDetailsById(eq(1L)) } returns simpleMovieDetails().toOption()
 
         val response = httpPort.getMovieDetailsById(1L)
 
@@ -54,7 +53,7 @@ class HttpMoviePortTest {
 
     @Test
     fun `given movie id when movie does not exists then should return not found`() = runBlockingTest {
-        coEvery { movieController.getMovieDetailsById(eq(1L)) } returns Left(MovieNotFoundException)
+        coEvery { movieController.getMovieDetailsById(eq(1L)) } returns None
 
         val response = httpPort.getMovieDetailsById(1L)
 

@@ -1,6 +1,7 @@
 package com.github.brunotorrao.furious.ports.out
 
 import arrow.core.Either
+import arrow.core.None
 import com.github.brunotorrao.furious.domain.exceptions.MovieException.MovieNotFoundException
 import com.github.brunotorrao.furious.fixtures.simpleExternalMovieDetails
 import com.github.brunotorrao.furious.stubForImdbGet
@@ -39,12 +40,12 @@ internal class ExternalMoviePortTest {
     }
 
     @Test
-    fun `given non existing imdb movie when get details then should return movie not found withou throwing`() = runBlocking {
+    fun `given non existing imdb movie when get details then should return none`() = runBlocking {
 
         stubForImdbGetIncorrectImdbId("tt0232450")
 
         val details = externalMoviePort.getDetails("tt0232450")
 
-        assertEquals(Either.Left(MovieNotFoundException), details)
+        assertEquals(None, details)
     }
 }
