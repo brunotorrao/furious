@@ -1,0 +1,2 @@
+api:
+  omdb: http://localhost:8081/?apikey=1234

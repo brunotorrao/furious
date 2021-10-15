@@ -1,7 +1,15 @@
 package com.github.brunotorrao.furious.controllers
 
+import arrow.core.Either
+import arrow.core.right
 import com.github.brunotorrao.furious.domain.Movie
+import com.github.brunotorrao.furious.domain.exceptions.MovieException.MovieNotFoundException
+import com.github.brunotorrao.furious.fixtures.simpleExternalMovieDetails
+import com.github.brunotorrao.furious.fixtures.simpleMovieDetails
 import com.github.brunotorrao.furious.ports.out.DbMoviePort
+import com.github.brunotorrao.furious.ports.out.ExternalMoviePort
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -14,6 +22,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MockKExtension::class)
@@ -22,10 +32,12 @@ class MovieControllerTest {
     lateinit var controller: MovieController
     @MockK
     lateinit var dbMoviePort: DbMoviePort
+    @MockK
+    lateinit var externalMoviePort: ExternalMoviePort
 
     @BeforeEach
     fun init() {
-        controller = MovieController(dbMoviePort)
+        controller = MovieController(dbMoviePort, externalMoviePort)
     }
 
     @Test
@@ -44,6 +56,36 @@ class MovieControllerTest {
         val allMovies = controller.getAllMovies()
 
         assertEquals(allMovies.toList(), listOf<Movie>())
+    }
+
+    @Test
+    fun `given a movie when get details then should return the movie details`() = runBlockingTest {
+        val movieId = 1L
+        val movie = Movie(movieId, "The Fast and the Furious", "tt0232500")
+        val details = simpleMovieDetails()
+        val externalMovieDetails = simpleExternalMovieDetails()
+
+        every { dbMoviePort.findById( eq(movieId)) } returns Mono.just(movie)
+        coEvery { externalMoviePort.getDetails(eq(movie.externalId)) } returns externalMovieDetails.right()
+
+        val detailsResult = controller.getMovieDetailsById(movieId)
+
+        assertEquals(details, detailsResult.orNull())
+    }
+
+    @Test
+    fun `given a non existing movie when get details then should return movie not found without throwing`() = runBlockingTest {
+        val movieId = 1L
+        val movie = Movie(movieId, "The Fast and the Furious", "tt0232500")
+        val details = simpleMovieDetails()
+
+        every { dbMoviePort.findById( eq(movieId)) } returns Mono.empty()
+        coVerify(exactly = 0)  { externalMoviePort.getDetails(eq(movie.externalId)) }
+
+        val detailsResult = controller.getMovieDetailsById(movieId)
+
+        assertEquals(true, detailsResult.isLeft())
+        assertEquals(Either.Left(MovieNotFoundException), detailsResult)
     }
 
 }

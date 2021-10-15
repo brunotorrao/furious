@@ -1,0 +1,2 @@
+api:
+  omdb: http://www.omdbapi.com/?apikey=${API_KEY}

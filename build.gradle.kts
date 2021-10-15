@@ -37,6 +37,9 @@ dependencies {
   testImplementation("com.ninja-squad:springmockk:3.0.1")
 	testImplementation("io.projectreactor:reactor-test")
   testImplementation(  "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+  testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:3.0.4")
+  testImplementation("com.github.tomakehurst:wiremock-jre8:2.31.0")
+
 }
 
 dependencyManagement {
