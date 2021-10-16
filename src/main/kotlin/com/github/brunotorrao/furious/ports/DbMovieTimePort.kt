@@ -1,4 +1,4 @@
-package com.github.brunotorrao.furious.ports.out
+package com.github.brunotorrao.furious.ports
 
 import arrow.core.Either
 import arrow.core.left

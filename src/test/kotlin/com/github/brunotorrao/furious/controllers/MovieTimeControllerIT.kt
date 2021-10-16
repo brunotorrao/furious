@@ -1,4 +1,4 @@
-package com.github.brunotorrao.furious.ports.`in`
+package com.github.brunotorrao.furious.controllers
 
 import com.github.brunotorrao.furious.fixtures.jsonForAllMovieTimes
 import com.github.brunotorrao.furious.fixtures.jsonForMovieConflict
@@ -30,7 +30,7 @@ import org.springframework.web.reactive.function.BodyInserters.fromValue
 @WireMockTest(httpPort = 8081)
 @ActiveProfiles("test")
 @TestMethodOrder(OrderAnnotation::class)
-internal class HttpMovieTimePortIT {
+internal class MovieTimeControllerIT {
 
     @Autowired
     lateinit var webTestClient: WebTestClient

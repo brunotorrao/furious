@@ -1,4 +1,4 @@
-package com.github.brunotorrao.furious.ports.`in`
+package com.github.brunotorrao.furious.controllers
 
 import com.github.brunotorrao.furious.fixtures.jsonForAllMovies
 import com.github.brunotorrao.furious.fixtures.jsonForMovieById
@@ -20,7 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @AutoConfigureWebTestClient
 @WireMockTest(httpPort = 8081)
 @ActiveProfiles("test")
-class HttpMoviePortIT {
+class MovieControllerIT {
 
     @Autowired
     lateinit var webTestClient: WebTestClient

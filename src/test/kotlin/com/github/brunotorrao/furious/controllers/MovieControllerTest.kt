@@ -4,8 +4,8 @@ import arrow.core.toOption
 import com.github.brunotorrao.furious.domain.Movie
 import com.github.brunotorrao.furious.fixtures.simpleExternalMovieDetails
 import com.github.brunotorrao.furious.fixtures.simpleMovieDetails
-import com.github.brunotorrao.furious.ports.out.DbMoviePort
-import com.github.brunotorrao.furious.ports.out.ExternalMoviePort
+import com.github.brunotorrao.furious.ports.DbMoviePort
+import com.github.brunotorrao.furious.ports.ExternalMoviePort
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -65,9 +65,10 @@ class MovieControllerTest {
         every { dbMoviePort.findById( eq(movieId)) } returns Mono.just(movie)
         coEvery { externalMoviePort.getDetails(eq(movie.externalId)) } returns externalMovieDetails.toOption()
 
-        val detailsResult = controller.getMovieDetailsById(movieId)
+        val response = controller.getMovieDetailsById(movieId)
 
-        assertEquals(details, detailsResult.orNull())
+        assertEquals(200, response.statusCodeValue)
+        assertEquals(details, response.body)
     }
 
     @Test
@@ -78,9 +79,9 @@ class MovieControllerTest {
         every { dbMoviePort.findById( eq(movieId)) } returns Mono.empty()
         coVerify(exactly = 0)  { externalMoviePort.getDetails(eq(movie.externalId)) }
 
-        val detailsResult = controller.getMovieDetailsById(movieId)
+        val response = controller.getMovieDetailsById(movieId)
 
-        assertEquals(true, detailsResult.isEmpty())
+        assertEquals(404, response.statusCodeValue)
+        assertEquals("movie not found", response.body)
     }
-
 }

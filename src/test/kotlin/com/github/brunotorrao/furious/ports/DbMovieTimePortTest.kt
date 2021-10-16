@@ -1,8 +1,10 @@
-package com.github.brunotorrao.furious.ports.out
+package com.github.brunotorrao.furious.ports
 
 import arrow.core.left
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeConflict
 import com.github.brunotorrao.furious.fixtures.simpleMovieTime
+import com.github.brunotorrao.furious.ports.DbMovieTimePort
+import com.github.brunotorrao.furious.ports.MovieTimeRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

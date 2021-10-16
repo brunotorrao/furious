@@ -1,4 +1,4 @@
-package com.github.brunotorrao.furious.ports.out
+package com.github.brunotorrao.furious.ports
 
 import com.github.brunotorrao.furious.domain.Movie
 import org.springframework.data.repository.reactive.ReactiveCrudRepository

@@ -1,9 +1,8 @@
-package com.github.brunotorrao.furious.ports.out
+package com.github.brunotorrao.furious.ports
 
-import arrow.core.Either
 import arrow.core.None
-import com.github.brunotorrao.furious.domain.exceptions.MovieException.MovieNotFoundException
 import com.github.brunotorrao.furious.fixtures.simpleExternalMovieDetails
+import com.github.brunotorrao.furious.ports.ExternalMoviePort
 import com.github.brunotorrao.furious.stubForImdbGet
 import com.github.brunotorrao.furious.stubForImdbGetIncorrectImdbId
 import com.github.tomakehurst.wiremock.junit5.WireMockTest

@@ -10,7 +10,7 @@ import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.Movie
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeNotFoundException
 import com.github.brunotorrao.furious.fixtures.movieTimeWithoutId
 import com.github.brunotorrao.furious.fixtures.simpleMovieTime
-import com.github.brunotorrao.furious.ports.out.DbMovieTimePort
+import com.github.brunotorrao.furious.ports.DbMovieTimePort
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -69,7 +69,8 @@ class MovieTimeControllerTest {
 
         val movieTimes = controller.createMovieTime(1L, movieTime)
 
-        assertEquals(movieTime, movieTimes.orNull())
+        assertEquals(movieTime, movieTimes.body)
+        assertEquals(201, movieTimes.statusCodeValue)
     }
 
     @Test
@@ -81,7 +82,8 @@ class MovieTimeControllerTest {
 
         val result = controller.createMovieTime(1L, movieTime)
 
-        assertEquals(MovieTimeConflict.left(), result)
+        assertEquals(409, result.statusCodeValue)
+        assertEquals("date for the movie already exists", result.body)
     }
 
     @Test
@@ -92,7 +94,8 @@ class MovieTimeControllerTest {
 
         val result = controller.updatePriceAndDateTime(1L, 1L, movieTimeUpdate)
 
-        assertEquals(MovieTimeNotFoundException.left(), result)
+        assertEquals(404, result.statusCodeValue)
+        assertEquals("movie time not found", result.body)
     }
 
     @Test
@@ -108,7 +111,8 @@ class MovieTimeControllerTest {
 
         val result = controller.updatePriceAndDateTime(1L, 1L, movieTimeUpdate)
 
-        assertEquals(movieTimeUpdated, result.orNull())
+        assertEquals(movieTimeUpdated, result.body)
+        assertEquals(200, result.statusCodeValue)
     }
 
     @Test
@@ -117,13 +121,13 @@ class MovieTimeControllerTest {
         val movieTimeUpdate = MovieTimeUpdate(18.9.toBigDecimal(), LocalDateTime.of(2021, 10, 16, 20, 40))
         val movieTimeUpdated = movieTime.copy(price = movieTimeUpdate.price, date = movieTimeUpdate.date)
 
-
         coEvery { dbMovieTimePort.findByIdAndMovieId(eq(1L), eq(1L)) } returns movieTime.toOption()
 
         coEvery { dbMovieTimePort.save(eq(movieTimeUpdated)) } returns MovieTimeGenericException.left()
 
         val result = controller.updatePriceAndDateTime(1L, 1L, movieTimeUpdate)
 
-        assertEquals(MovieTimeGenericException.left(), result)
+        assertEquals(500, result.statusCodeValue)
+        assertEquals("something went wrong creating movie time", result.body)
     }
 }
