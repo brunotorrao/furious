@@ -21,3 +21,16 @@ INSERT INTO movie (external_id, title)
 VALUES ('tt2820852', 'Furious 7');
 INSERT INTO movie (external_id, title)
 VALUES ('tt4630562', 'The Fate of the Furious');
+
+CREATE TABLE movie_time
+(
+  id  bigint PRIMARY KEY AUTO_INCREMENT,
+  date timestamp not null,
+  price decimal not null,
+  movie_id bigint,
+  foreign key (movie_id) references movie(id),
+  constraint date_movie_id_ux unique (movie_id, date)
+);
+
+INSERT INTO movie_time (date, price, movie_id)
+VALUES (parsedatetime('15/10/2021 20:30', 'dd/MM/yyyy HH:mm'), 15.6, 1)
