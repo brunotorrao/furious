@@ -7,7 +7,9 @@ import com.github.brunotorrao.furious.domain.MovieTime
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeConflict
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeGenericException
+import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeMovieNotFounExcetpion
 import com.github.brunotorrao.furious.extensions.awaitOption
+import com.github.brunotorrao.furious.extensions.foreignKeyMissing
 import com.github.brunotorrao.furious.extensions.isConflict
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.reactor.awaitSingle
@@ -43,6 +45,7 @@ class DbMovieTimePort(
         log.error { "error creating movie time exception=$err" }
         return when {
             err.isConflict() -> MovieTimeConflict.left().toMono()
+            err.foreignKeyMissing("movie") -> MovieTimeMovieNotFounExcetpion.left().toMono()
             else -> MovieTimeGenericException.left().toMono()
         }
     }

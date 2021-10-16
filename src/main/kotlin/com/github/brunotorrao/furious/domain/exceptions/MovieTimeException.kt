@@ -4,4 +4,5 @@ sealed class MovieTimeException {
     object MovieTimeConflict: MovieTimeException()
     object MovieTimeGenericException: MovieTimeException()
     object MovieTimeNotFoundException: MovieTimeException()
+    object MovieTimeMovieNotFounExcetpion: MovieTimeException()
 }

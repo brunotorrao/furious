@@ -27,10 +27,28 @@ CREATE TABLE movie_time
   id  bigint PRIMARY KEY AUTO_INCREMENT,
   date timestamp not null,
   price decimal not null,
-  movie_id bigint,
+  movie_id bigint not null,
   foreign key (movie_id) references movie(id),
   constraint date_movie_id_ux unique (movie_id, date)
 );
 
+CREATE INDEX movie_time_movie_id_x ON movie_time(movie_id);
+CREATE INDEX movie_time_movie_id_date_x ON movie_time(movie_id, date);
+
 INSERT INTO movie_time (date, price, movie_id)
-VALUES (parsedatetime('15/10/2021 20:30', 'dd/MM/yyyy HH:mm'), 15.6, 1)
+VALUES (parsedatetime('15/10/2021 20:30', 'dd/MM/yyyy HH:mm'), 15.6, 1);
+
+CREATE TABLE review
+(
+  id bigint PRIMARY KEY AUTO_INCREMENT,
+  movie_id bigint not null,
+  customer_id bigint not null,
+  rating int not null,
+
+  foreign key (movie_id) references movie(id),
+  constraint customer_id_movie_id_ux unique (customer_id, movie_id)
+
+);
+
+CREATE INDEX review_customer_id_x ON review(customer_id);
+CREATE INDEX review_movie_id_x ON review(movie_id);

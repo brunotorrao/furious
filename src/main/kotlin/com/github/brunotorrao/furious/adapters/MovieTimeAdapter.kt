@@ -9,6 +9,7 @@ import com.github.brunotorrao.furious.domain.MovieTime
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeConflict
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeGenericException
+import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeMovieNotFounExcetpion
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CONFLICT
@@ -34,4 +35,5 @@ fun handleErrorResponse(exception: MovieTimeException) = when (exception) {
     MovieTimeConflict -> status(CONFLICT).body("date for the movie already exists")
     MovieTimeGenericException -> status(INTERNAL_SERVER_ERROR).body("something went wrong creating movie time")
     MovieTimeNotFoundException -> status(NOT_FOUND).body("movie time not found")
+    MovieTimeMovieNotFounExcetpion -> status(NOT_FOUND).body("movie not found")
 }

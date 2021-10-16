@@ -3,9 +3,9 @@ package com.github.brunotorrao.furious.adapters
 import arrow.core.left
 import arrow.core.right
 import arrow.core.toOption
-import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeConflict
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeGenericException
+import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeMovieNotFounExcetpion
 import com.github.brunotorrao.furious.fixtures.simpleMovieTime
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -52,6 +52,16 @@ class MovieTimeAdapterTest {
 
         assertEquals("something went wrong creating movie time", response.body)
         assertEquals(500, response.statusCodeValue)
+    }
+
+    @Test
+    fun `given movie not found when creating movie time then should map to not found`() {
+        val response = MovieTimeMovieNotFounExcetpion.left()
+            .toOption()
+            .toResponse()
+
+        assertEquals("movie not found", response.body)
+        assertEquals(404, response.statusCodeValue)
     }
 
     @Test

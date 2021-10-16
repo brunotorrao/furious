@@ -1,8 +1,13 @@
 package com.github.brunotorrao.furious.ports
 
 import arrow.core.left
+import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeConflict
+import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeGenericException
+import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeMovieNotFounExcetpion
+import com.github.brunotorrao.furious.domain.exceptions.ReviewException
 import com.github.brunotorrao.furious.fixtures.simpleMovieTime
+import com.github.brunotorrao.furious.fixtures.simpleReview
 import com.github.brunotorrao.furious.ports.DbMovieTimePort
 import com.github.brunotorrao.furious.ports.MovieTimeRepository
 import io.mockk.coEvery
@@ -71,6 +76,27 @@ internal class DbMovieTimePortTest {
         val movieTime = port.save(simpleMovieTime())
 
         assertEquals(MovieTimeConflict.left(), movieTime)
+    }
+
+    @Test
+    fun `given movie time to save when saving throws foreign key missing then should return movie not found`() = runBlockingTest {
+        coEvery { repository.save(eq(simpleMovieTime())) } returns Mono.error(
+            DataIntegrityViolationException(
+                "Referential integrity constraint violation: " +
+                    "\"CONSTRAINT_8F: PUBLIC.REVIEW FOREIGN KEY(MOVIE_ID) REFERENCES PUBLIC.MOVIE(ID) (15)"))
+
+        val result = port.save(simpleMovieTime())
+
+        assertEquals(MovieTimeMovieNotFounExcetpion.left(), result)
+    }
+
+    @Test
+    fun `given movie time to save when saving throws unknow error then should return generic exception`() = runBlockingTest {
+        coEvery { repository.save(eq(simpleMovieTime())) } returns Mono.error(DataIntegrityViolationException(""))
+
+        val result = port.save(simpleMovieTime())
+
+        assertEquals(MovieTimeGenericException.left(), result)
     }
 
 }
