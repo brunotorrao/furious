@@ -6,7 +6,6 @@ import com.github.brunotorrao.furious.domain.Review
 import com.github.brunotorrao.furious.logic.ReviewLogic.isValid
 import com.github.brunotorrao.furious.logic.ReviewLogic.prepareSave
 import com.github.brunotorrao.furious.ports.DbReviewPort
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.OK
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

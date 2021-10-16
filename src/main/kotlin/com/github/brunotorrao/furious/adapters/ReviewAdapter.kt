@@ -8,7 +8,6 @@ import com.github.brunotorrao.furious.domain.exceptions.ReviewException.ReviewCo
 import com.github.brunotorrao.furious.domain.exceptions.ReviewException.ReviewGenericException
 import com.github.brunotorrao.furious.domain.exceptions.ReviewException.ReviewMovieNotFoundException
 import com.github.brunotorrao.furious.domain.exceptions.ReviewException.ReviewRatingException
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR

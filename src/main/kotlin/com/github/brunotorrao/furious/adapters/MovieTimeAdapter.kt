@@ -11,11 +11,9 @@ import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.Movie
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeGenericException
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeMovieNotFounExcetpion
 import com.github.brunotorrao.furious.domain.exceptions.MovieTimeException.MovieTimeNotFoundException
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.NOT_FOUND
-import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.created
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.ResponseEntity.status
