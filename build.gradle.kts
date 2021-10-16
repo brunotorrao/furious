@@ -30,6 +30,8 @@ dependencies {
   implementation("io.arrow-kt:arrow-core:1.0.0")
   implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
   implementation("io.r2dbc:r2dbc-h2")
+  implementation("io.springfox:springfox-boot-starter:3.0.0")
+  implementation("io.springfox:springfox-swagger-ui:3.0.0")
   runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(module = "mockito-core")
