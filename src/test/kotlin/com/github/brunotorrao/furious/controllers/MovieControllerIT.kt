@@ -1,5 +1,6 @@
 package com.github.brunotorrao.furious.controllers
 
+import com.github.brunotorrao.furious.configs.TestRedisConfiguration
 import com.github.brunotorrao.furious.fixtures.jsonForAllMovies
 import com.github.brunotorrao.furious.fixtures.jsonForMovieById
 import com.github.brunotorrao.furious.stubForImdbGet
@@ -16,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest
+@SpringBootTest(classes = [TestRedisConfiguration::class])
 @AutoConfigureWebTestClient
 @WireMockTest(httpPort = 8081)
 @ActiveProfiles("test")

@@ -6,12 +6,13 @@ import com.github.brunotorrao.furious.domain.ExternalMovieDetails
 import com.github.brunotorrao.furious.domain.ExternalMovieRating
 import com.github.brunotorrao.furious.domain.MovieDetails
 import com.github.brunotorrao.furious.domain.MovieRating
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.status
 
 
 fun Option<MovieDetails>.toResponse() = this.map { ResponseEntity.ok(it) }
-    .getOrElse { ResponseEntity.status(HttpStatus.NOT_FOUND).body("movie not found") }
+    .getOrElse { status(NOT_FOUND).body("movie not found") }
 
 fun Option<ExternalMovieDetails>.toMovieDetails(id: Long) = this.map {
     MovieDetails(

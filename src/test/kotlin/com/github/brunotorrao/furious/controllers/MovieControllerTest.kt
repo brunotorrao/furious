@@ -1,10 +1,12 @@
 package com.github.brunotorrao.furious.controllers
 
+import arrow.core.None
 import arrow.core.toOption
 import com.github.brunotorrao.furious.domain.Movie
 import com.github.brunotorrao.furious.fixtures.simpleExternalMovieDetails
 import com.github.brunotorrao.furious.fixtures.simpleMovieDetails
 import com.github.brunotorrao.furious.ports.DbMoviePort
+import com.github.brunotorrao.furious.ports.ExternalMovieCachePort
 import com.github.brunotorrao.furious.ports.ExternalMoviePort
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -31,10 +33,12 @@ class MovieControllerTest {
     lateinit var dbMoviePort: DbMoviePort
     @MockK
     lateinit var externalMoviePort: ExternalMoviePort
+    @MockK
+    lateinit var externalMovieCachePort: ExternalMovieCachePort
 
     @BeforeEach
     fun init() {
-        controller = MovieController(dbMoviePort, externalMoviePort)
+        controller = MovieController(dbMoviePort, externalMoviePort, externalMovieCachePort)
     }
 
     @Test
@@ -63,7 +67,9 @@ class MovieControllerTest {
         val externalMovieDetails = simpleExternalMovieDetails()
 
         every { dbMoviePort.findById( eq(movieId)) } returns Mono.just(movie)
-        coEvery { externalMoviePort.getDetails(eq(movie.externalId)) } returns externalMovieDetails.toOption()
+        coEvery { externalMoviePort.getDetails(eq(movie)) } returns externalMovieDetails.toOption()
+        coEvery { externalMovieCachePort.findById(eq(movie)) } returns None
+        coEvery { externalMovieCachePort.cache(eq(externalMovieDetails)) } returns externalMovieDetails
 
         val response = controller.getMovieDetailsById(movieId)
 
@@ -77,11 +83,32 @@ class MovieControllerTest {
         val movie = Movie(movieId, "The Fast and the Furious", "tt0232500")
 
         every { dbMoviePort.findById( eq(movieId)) } returns Mono.empty()
-        coVerify(exactly = 0)  { externalMoviePort.getDetails(eq(movie.externalId)) }
+        coVerify(exactly = 0)  { externalMoviePort.getDetails(eq(movie)) }
+        coVerify(exactly = 0) { externalMovieCachePort.findById(any()) }
+        coVerify(exactly = 0) { externalMovieCachePort.cache(any()) }
 
         val response = controller.getMovieDetailsById(movieId)
 
         assertEquals(404, response.statusCodeValue)
         assertEquals("movie not found", response.body)
+    }
+
+    @Test
+    fun `given a movie when cached then should return from the cache`() = runBlockingTest {
+        val movieId = 1L
+        val movie = Movie(movieId, "The Fast and the Furious", "tt0232500")
+        val details = simpleMovieDetails()
+        val externalMovieDetails = simpleExternalMovieDetails()
+
+        every { dbMoviePort.findById( eq(movieId)) } returns Mono.just(movie)
+        coEvery { externalMovieCachePort.findById(eq(movie)) } returns externalMovieDetails.toOption()
+
+        coVerify(exactly = 0) { externalMoviePort.getDetails(any()) }
+        coVerify(exactly = 0) { externalMovieCachePort.cache(any()) }
+
+        val response = controller.getMovieDetailsById(movieId)
+
+        assertEquals(200, response.statusCodeValue)
+        assertEquals(details, response.body)
     }
 }

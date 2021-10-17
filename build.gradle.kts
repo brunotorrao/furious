@@ -32,8 +32,11 @@ dependencies {
   implementation("io.r2dbc:r2dbc-h2")
   implementation("io.springfox:springfox-boot-starter:3.0.0")
   implementation("io.springfox:springfox-swagger-ui:3.0.0")
+  implementation("org.springframework.boot:spring-boot-starter-cache")
+  implementation("org.springframework.boot:spring-boot-starter-data-redis")
   runtimeOnly("com.h2database:h2")
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+  runtimeOnly("it.ozimov:embedded-redis:0.7.1")
+  testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(module = "mockito-core")
   }
   testImplementation("com.ninja-squad:springmockk:3.0.1")

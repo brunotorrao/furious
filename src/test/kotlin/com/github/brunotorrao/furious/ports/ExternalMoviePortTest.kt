@@ -1,8 +1,8 @@
 package com.github.brunotorrao.furious.ports
 
 import arrow.core.None
+import com.github.brunotorrao.furious.domain.Movie
 import com.github.brunotorrao.furious.fixtures.simpleExternalMovieDetails
-import com.github.brunotorrao.furious.ports.ExternalMoviePort
 import com.github.brunotorrao.furious.stubForImdbGet
 import com.github.brunotorrao.furious.stubForImdbGetIncorrectImdbId
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
@@ -33,7 +33,7 @@ internal class ExternalMoviePortTest {
 
             stubForImdbGet("tt0232500")
 
-            val details = externalMoviePort.getDetails("tt0232500")
+            val details = externalMoviePort.getDetails(Movie(1L, "The Fast and the Furious", "tt0232500"))
 
             assertEquals(simpleExternalMovieDetails(), details.orNull())
     }
@@ -43,7 +43,7 @@ internal class ExternalMoviePortTest {
 
         stubForImdbGetIncorrectImdbId("tt0232450")
 
-        val details = externalMoviePort.getDetails("tt0232450")
+        val details = externalMoviePort.getDetails(Movie(1L, "The Fast and the Furious", "tt0232500"))
 
         assertEquals(None, details)
     }

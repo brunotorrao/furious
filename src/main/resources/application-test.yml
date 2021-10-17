@@ -1,2 +1,6 @@
 api:
   omdb: http://localhost:8081/?apikey=1234
+
+spring:
+  redis:
+    port: 6370

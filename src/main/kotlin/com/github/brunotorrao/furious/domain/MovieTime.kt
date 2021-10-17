@@ -3,10 +3,12 @@ package com.github.brunotorrao.furious.domain
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModelProperty
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Table
 import org.springframework.format.annotation.DateTimeFormat
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
+@Table
 data class MovieTime(
     @Id
     val id: Long = 0,

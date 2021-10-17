@@ -1,3 +1,7 @@
+DROP TABLE if exists review;
+DROP TABLE if exists movie_time;
+DROP TABLE if exists movie;
+
 CREATE TABLE movie
 (
   id          bigint PRIMARY KEY AUTO_INCREMENT,

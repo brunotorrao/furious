@@ -4,7 +4,9 @@ import arrow.core.Either
 import arrow.core.right
 import com.github.brunotorrao.furious.domain.exceptions.MovieException
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Table
 
+@Table
 data class Movie(
     @Id
     val id: Long = 0,
