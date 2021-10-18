@@ -11,14 +11,13 @@ services:
     environment:
       - API_KEY
     depends_on:
-      - furious-redis
       - furious-postgres
+      - furious-redis
 
   furious-postgres:
     image: postgres
     container_name: furious-postgres
     hostname: furious-postgres
-    restart: always
     environment:
       POSTGRES_USER: furious
       POSTGRES_PASSWORD: furious
@@ -29,5 +28,6 @@ services:
   furious-redis:
     image: redis
     container_name: furious-redis
-    hostname: furious-redis
     restart: always
+    ports:
+      - "6379:6379"

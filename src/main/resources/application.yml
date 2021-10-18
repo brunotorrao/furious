@@ -1,14 +1,14 @@
 api:
   omdb: http://www.omdbapi.com/?apikey=${API_KEY}
 spring:
+  redis:
+    host: furious-redis
   r2dbc:
     username: furious
     password: furious
-    url: r2dbc:postgresql://localhost:5432/furious
+    url: r2dbc:postgresql://furious-postgres:5432/furious
   flyway:
-    url: jdbc:postgresql://localhost:5432/furious
+    url: jdbc:postgresql://furious-postgres:5432/furious
     user: furious
     password: furious
     baseline-on-migrate: true
-server:
-  port: 8081
