@@ -45,9 +45,9 @@ fun jsonForAllMovies() = """
                 ]
             """.trimIndent()
 
-fun jsonForMovieById() = """
+fun jsonForMovieById(id: Long = 1) = """
         {
-          "id": 1,
+          "id": ${id},
           "title": "The Fast and the Furious",
           "year": "2001",
           "rated": "PG-13",

@@ -67,7 +67,7 @@ internal class DbReviewPortTest {
 
     @Test
     fun `given review to save when saving throws index violation then should return conflict`() = runBlockingTest {
-        coEvery { repository.save(eq(simpleReview()))} returns Mono.error(DataIntegrityViolationException("Unique index or primary key violation"))
+        coEvery { repository.save(eq(simpleReview()))} returns Mono.error(DataIntegrityViolationException("duplicate key"))
 
         val result = port.save(simpleReview())
 
@@ -78,8 +78,7 @@ internal class DbReviewPortTest {
     fun `given review to save when saving throws foreign key missing then should return movie not found`() = runBlockingTest {
         coEvery { repository.save(eq(simpleReview())) } returns Mono.error(
             DataIntegrityViolationException(
-                "Referential integrity constraint violation: " +
-                    "\"CONSTRAINT_8F: PUBLIC.REVIEW FOREIGN KEY(MOVIE_ID) REFERENCES PUBLIC.MOVIE(ID) (15)"))
+                "violates foreign key movie"))
 
         val result = port.save(simpleReview())
 

@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  furious:
+    build: .
+    restart: always
+    container_name: furious-container
+    ports:
+      - 8080:8080
+    working_dir: /
+    environment:
+      - API_KEY
+    depends_on:
+      - furious-redis
+      - furious-postgres
+
+  furious-postgres:
+    image: postgres
+    container_name: furious-postgres
+    hostname: furious-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: furious
+      POSTGRES_PASSWORD: furious
+      POSTGRES_DB: furious
+    ports:
+      - "5432:5432"
+
+  furious-redis:
+    image: redis
+    container_name: furious-redis
+    hostname: furious-redis
+    restart: always

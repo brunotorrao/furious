@@ -1,39 +1,27 @@
 package com.github.brunotorrao.furious.controllers
 
+import com.github.brunotorrao.furious.IntegrationTest
 import com.github.brunotorrao.furious.fixtures.jsonForAllMovieTimes
 import com.github.brunotorrao.furious.fixtures.jsonForMovieConflict
 import com.github.brunotorrao.furious.fixtures.jsonForMovieCreated
 import com.github.brunotorrao.furious.fixtures.jsonForUpdatePriceAndDateTime
 import com.github.brunotorrao.furious.fixtures.jsonForUpdatePriceAndDateTimeResult
-import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestMethodOrder
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.MediaType
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters.fromValue
 
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest
-@AutoConfigureWebTestClient
-@WireMockTest(httpPort = 8081)
-@ActiveProfiles("test")
-@TestMethodOrder(OrderAnnotation::class)
-internal class MovieTimeControllerIT {
+class MovieTimeControllerIT  : IntegrationTest() {
 
     @Autowired
     lateinit var webTestClient: WebTestClient
+
 
     @Test
     @Order(1)

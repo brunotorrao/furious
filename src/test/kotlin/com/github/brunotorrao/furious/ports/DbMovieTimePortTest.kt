@@ -71,7 +71,7 @@ internal class DbMovieTimePortTest {
 
     @Test
     fun `given movie to save when saving throws an error then should return error mapped`() = runBlockingTest {
-        coEvery { repository.save(eq(simpleMovieTime()))} returns Mono.error(DataIntegrityViolationException("Unique index or primary key violation"))
+        coEvery { repository.save(eq(simpleMovieTime()))} returns Mono.error(DataIntegrityViolationException("duplicate key"))
 
         val movieTime = port.save(simpleMovieTime())
 
@@ -81,9 +81,7 @@ internal class DbMovieTimePortTest {
     @Test
     fun `given movie time to save when saving throws foreign key missing then should return movie not found`() = runBlockingTest {
         coEvery { repository.save(eq(simpleMovieTime())) } returns Mono.error(
-            DataIntegrityViolationException(
-                "Referential integrity constraint violation: " +
-                    "\"CONSTRAINT_8F: PUBLIC.REVIEW FOREIGN KEY(MOVIE_ID) REFERENCES PUBLIC.MOVIE(ID) (15)"))
+            DataIntegrityViolationException("violates foreign key movie "))
 
         val result = port.save(simpleMovieTime())
 
